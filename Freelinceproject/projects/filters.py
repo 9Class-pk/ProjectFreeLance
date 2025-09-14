@@ -6,7 +6,7 @@ class ProjectFilter(FilterSet):
     class Meta:
         model = Project
         fields = {
-            'title': ['icontains'],
+            'project_name': ['icontains'],
             'description': ['icontains'],
             'category__category_name': ['icontains'],
             'budget': ['gte', 'lte'],

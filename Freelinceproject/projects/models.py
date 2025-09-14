@@ -51,7 +51,7 @@ class Project(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.title
+        return self.project_name
 
 
 class Offer(models.Model):
@@ -63,7 +63,7 @@ class Offer(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'Offer by {self.freelancer.username} for {self.project.title}'
+        return f'Offer by {self.freelancer.username} for {self.project.project_name}'
 
 
 class Review(models.Model):

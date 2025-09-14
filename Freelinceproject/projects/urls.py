@@ -1,7 +1,11 @@
 
 from rest_framework.routers import DefaultRouter
 from django.urls import path, include
-
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+    TokenBlacklistView
+)
 from .views import (
     SkillViewSet,
     UserProfileViewSet,
@@ -9,6 +13,9 @@ from .views import (
     ProjectViewSet,
     OfferViewSet,
     ReviewViewSet,
+    RegisterView,
+    LoginView,
+    LogoutView
 )
 
 router = DefaultRouter()
@@ -23,4 +30,5 @@ app_name = 'projects'
 
 urlpatterns = [
     path('', include(router.urls)),
+
 ]
