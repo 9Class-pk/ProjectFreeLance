@@ -8,7 +8,9 @@ from rest_framework_simplejwt.views import (
 )
 from .views import (
     SkillViewSet,
-    UserProfileViewSet,
+    UserProfileListAPIView,
+    UserProfileDetailAPIView,
+    CurrentUserAPIView,
     CategoryViewSet,
     ProjectViewSet,
     OfferViewSet,
@@ -20,7 +22,6 @@ from .views import (
 
 router = DefaultRouter()
 router.register(r'skills', SkillViewSet, basename='skill')
-router.register(r'users', UserProfileViewSet, basename='userprofile')
 router.register(r'categories', CategoryViewSet, basename='category')
 router.register(r'projects', ProjectViewSet, basename='project')
 router.register(r'offers', OfferViewSet, basename='offer')
@@ -30,5 +31,9 @@ app_name = 'projects'
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('users/', UserProfileListAPIView.as_view(), name='user_list'),
+    path('users/me', CurrentUserAPIView.as_view(), name='current_user'),
+    path('users/<int:pk>/', UserProfileDetailAPIView.as_view(), name='user_detail'),
+
 
 ]

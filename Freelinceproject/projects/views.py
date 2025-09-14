@@ -17,10 +17,24 @@ class SkillViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 
-class UserProfileViewSet(viewsets.ModelViewSet):
+class UserProfileListAPIView(generics.ListAPIView):
     queryset = UserProfile.objects.all()
     serializer_class = UserProfileSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+
+class UserProfileDetailAPIView(generics.RetrieveAPIView):
+    queryset = UserProfile.objects.all()
+    serializer_class = UserProfileSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
+class CurrentUserAPIView(generics.RetrieveUpdateAPIView):
+    serializer_class = UserProfileSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_object(self):
+        return self.request.user
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
@@ -50,7 +64,6 @@ class ReviewViewSet(viewsets.ModelViewSet):
     queryset = Review.objects.all().select_related('project', 'reviewer', 'target')
     serializer_class = ReviewSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-
 
 
 
