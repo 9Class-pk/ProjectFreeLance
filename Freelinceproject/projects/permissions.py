@@ -38,3 +38,11 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
             return True
 
         return False
+
+
+from rest_framework import permissions
+
+class IsOfferOwner(permissions.BasePermission):
+
+    def has_object_permission(self, request, view, obj):
+        return obj.freelancer == request.user

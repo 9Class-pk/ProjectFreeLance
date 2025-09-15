@@ -23,19 +23,26 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class ProjectSerializer(serializers.ModelSerializer):
+class ProjectListSerializer(serializers.ModelSerializer):
     skills_required = SkillSerializer(many=True, read_only=True)
     client = UserProfileSerializer(read_only=True)
     category = CategorySerializer(read_only=True)
 
     class Meta:
         model = Project
-        fields = '__all__'
+        fields = ['id', 'project_name', 'description', 'category', 'skills_required']
+
+
+class ProjectDetailSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Project
+        fields = ['project_name', 'description', 'budget', 'deadline', 'status', 'created_at', 'updated_at', 'category', 'client', 'skills_required']
 
 
 class OfferSerializer(serializers.ModelSerializer):
     freelancer = UserProfileSerializer(read_only=True)
-    project = ProjectSerializer(read_only=True)
+    project = ProjectListSerializer(read_only=True)
 
     class Meta:
         model = Offer
@@ -45,7 +52,7 @@ class OfferSerializer(serializers.ModelSerializer):
 class ReviewSerializer(serializers.ModelSerializer):
     reviewer = UserProfileSerializer(read_only=True)
     target = UserProfileSerializer(read_only=True)
-    project = ProjectSerializer(read_only=True)
+    project = ProjectListSerializer(read_only=True)
 
     class Meta:
         model = Review
@@ -57,7 +64,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserProfile
-        fields = ("username", "email", "password")
+        fields = ("username", "email", "password", "role")
 
     def create(self, validated_data):
         user = UserProfile.objects.create_user(

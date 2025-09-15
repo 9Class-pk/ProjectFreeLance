@@ -1,12 +1,13 @@
 from rest_framework import viewsets, permissions, generics, status
 from .models import *
+from .permissions import IsOwnerOrReadOnly
 from .serializers import *
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from .filters import ProjectFilter
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 
@@ -43,9 +44,9 @@ class CategoryViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 
-class ProjectViewSet(viewsets.ModelViewSet):
+class ProjectListAPIVIew(generics.ListAPIView):
     queryset = Project.objects.all().select_related('category', 'client').prefetch_related('skills_required')
-    serializer_class = ProjectSerializer
+    serializer_class = ProjectListSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
@@ -54,10 +55,21 @@ class ProjectViewSet(viewsets.ModelViewSet):
     ordering = ['-created_at']
 
 
+class ProjectDetailAPIVIew(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Project.objects.all().select_related('category', 'client').prefetch_related('skills_required')
+    serializer_class = ProjectDetailSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
+
+
+class MyProjectsView(generics.ListAPIView):
+    serializer_class = ProjectListSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
 class OfferViewSet(viewsets.ModelViewSet):
     queryset = Offer.objects.all().select_related('project', 'freelancer')
     serializer_class = OfferSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, IsAuthenticatedOrReadOnly]
 
 
 class ReviewViewSet(viewsets.ModelViewSet):

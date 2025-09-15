@@ -12,7 +12,9 @@ from .views import (
     UserProfileDetailAPIView,
     CurrentUserAPIView,
     CategoryViewSet,
-    ProjectViewSet,
+    ProjectListAPIVIew,
+    ProjectDetailAPIVIew,
+    MyProjectsView,
     OfferViewSet,
     ReviewViewSet,
     RegisterView,
@@ -23,7 +25,6 @@ from .views import (
 router = DefaultRouter()
 router.register(r'skills', SkillViewSet, basename='skill')
 router.register(r'categories', CategoryViewSet, basename='category')
-router.register(r'projects', ProjectViewSet, basename='project')
 router.register(r'offers', OfferViewSet, basename='offer')
 router.register(r'reviews', ReviewViewSet, basename='review')
 
@@ -34,6 +35,9 @@ urlpatterns = [
     path('users/', UserProfileListAPIView.as_view(), name='user_list'),
     path('users/me', CurrentUserAPIView.as_view(), name='current_user'),
     path('users/<int:pk>/', UserProfileDetailAPIView.as_view(), name='user_detail'),
+    path('projects/', ProjectListAPIVIew.as_view(), name='project_list'),
+    path('projects/<int:pk>/', ProjectDetailAPIVIew.as_view(), name='project_detail'),
+    path('projects/my/', MyProjectsView.as_view(), name='my_project')
 
 
 ]
